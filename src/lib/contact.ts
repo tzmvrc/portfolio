@@ -68,9 +68,17 @@ export async function handleContactSubmission(
   body: unknown,
   env: Record<string, string | undefined> | undefined = undefined,
 ) {
-  const { Resend } = await import("resend");
+  // Load .env (only once)
   const { config } = await import("dotenv");
   config();
+
+  // Log environment variables to verify they're loaded
+  console.log("🔑 Actual API key:", JSON.stringify(process.env.RESEND_API_KEY));
+  console.log("🔍 RESEND_API_KEY exists?", !!process.env.RESEND_API_KEY);
+  console.log("🔍 RESEND_FROM_EMAIL:", process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev");
+  console.log("🔍 RESEND_TO_EMAIL:", process.env.RESEND_TO_EMAIL || "mjaspa9@gmail.com");
+
+  const { Resend } = await import("resend");
   const values = parseContactForm(body);
   const validation = validateContactForm(values);
 
@@ -94,6 +102,7 @@ export async function handleContactSubmission(
           }
         ).process?.env ?? {})
       : {});
+
   const apiKey = runtimeEnv.RESEND_API_KEY;
   const fromEmail = runtimeEnv.RESEND_FROM_EMAIL || "onboarding@resend.dev";
   const toEmail = runtimeEnv.RESEND_TO_EMAIL || "mjaspa9@gmail.com";
@@ -134,13 +143,14 @@ export async function handleContactSubmission(
       `,
     });
 
+    // 🔥 LOG THE EXACT ERROR FROM RESEND
     if (response.error) {
+      console.error("❌ RESEND ERROR:", JSON.stringify(response.error, null, 2));
       return {
         status: 502,
         body: {
           success: false,
-          message:
-            "The message could not be sent right now. Please try again shortly.",
+          message: `Resend error: ${response.error.message || "Unknown error"}`,
         },
       };
     }
@@ -153,13 +163,12 @@ export async function handleContactSubmission(
       },
     };
   } catch (error) {
-    console.error("Contact form email error", error);
+    console.error("💥 Contact form email error:", error);
     return {
       status: 500,
       body: {
         success: false,
-        message:
-          "A network or server error occurred while sending your message.",
+        message: "A network or server error occurred while sending your message.",
       },
     };
   }
