@@ -1,0 +1,20 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="40" fill="#060816"/>
+  <rect x="64" y="64" width="1072" height="592" rx="32" fill="url(#bg)"/>
+  <rect x="110" y="140" width="420" height="274" rx="28" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.25)"/>
+  <rect x="570" y="140" width="320" height="164" rx="28" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.22)"/>
+  <rect x="570" y="338" width="320" height="176" rx="28" fill="rgba(255,255,255,0.12)" stroke="rgba(255,255,255,0.22)"/>
+  <rect x="152" y="184" width="140" height="16" rx="8" fill="white" fill-opacity="0.8"/>
+  <rect x="152" y="214" width="210" height="12" rx="6" fill="white" fill-opacity="0.6"/>
+  <rect x="152" y="240" width="180" height="12" rx="6" fill="white" fill-opacity="0.45"/>
+  <circle cx="902" cy="220" r="64" fill="#7DD3FC" fill-opacity="0.35"/>
+  <circle cx="704" cy="420" r="54" fill="#A78BFA" fill-opacity="0.3"/>
+  <text x="124" y="610" fill="white" font-family="Inter, Arial, sans-serif" font-size="42" font-weight="700">PRODUCT EXPERIENCE</text>
+  <defs>
+    <linearGradient id="bg" x1="134" y1="84" x2="1150" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F766E"/>
+      <stop offset="0.5" stop-color="#2563EB"/>
+      <stop offset="1" stop-color="#8B5CF6"/>
+    </linearGradient>
+  </defs>
+</svg>
