@@ -1,11 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ExternalLink,
-  Link2,
-  MousePointer,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Link2, MousePointer } from "lucide-react";
 import { SectionHeading } from "./SectionHeading";
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
@@ -194,7 +188,9 @@ export function Projects() {
           {projects.map((p, i) => (
             <motion.article
               key={p.title}
-              ref={(el) => (cardRefs.current[i] = el)}
+              ref={(el) => {
+                cardRefs.current[i] = el;
+              }} // ✅ FIXED: braces + no return
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-60px" }}
@@ -332,7 +328,7 @@ export function Projects() {
                     <div className="absolute bottom-3 right-3 bg-black/60 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm z-30">
                       {currentIndex + 1} / {selectedProject.screenshots.length}
                     </div>
-                    {/* Floating arrows */}
+                    {/* Floating arrows - commented out as they are not used */}
                     {/* <button
                       onClick={(e) => {
                         e.stopPropagation();
