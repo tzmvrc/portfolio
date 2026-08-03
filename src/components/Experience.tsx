@@ -49,11 +49,21 @@ const edu = [
   },
 ];
 
-const certs = ["Wadhwani: Employability Skills", "Dean's List (SY 2022–2025)", "TESDA CSS NCII (2022)"];
+const certs = [
+  "Wadhwani: Employability Skills",
+  "Dean's List (SY 2022–2025)",
+  "TESDA CSS NCII (2022)",
+];
 
 export function Experience() {
   return (
-    <section id="experience" className="relative py-28 sm:py-36">
+    <motion.section
+      id="experience"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.18, margin: "-80px" }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="relative py-28 sm:py-36">
       <div className="mx-auto max-w-5xl px-6">
         <SectionHeading
           eyebrow="Experience"
@@ -75,14 +85,20 @@ export function Experience() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-80px" }}
                   transition={{ duration: 0.5 }}
-                  className={`relative grid sm:grid-cols-2 gap-4 sm:gap-10 items-center`}
-                >
-                  <div className={`pl-12 sm:pl-0 ${left ? "sm:text-right sm:pr-10" : "sm:col-start-2 sm:pl-10"}`}>
+                  className={`relative grid sm:grid-cols-2 gap-4 sm:gap-10 items-center`}>
+                  <div
+                    className={`pl-12 sm:pl-0 ${left ? "sm:text-right sm:pr-10" : "sm:col-start-2 sm:pl-10"}`}>
                     <div className="glass rounded-2xl p-5 hover:border-primary/40 transition-all">
-                      <div className="text-xs uppercase tracking-wider text-primary/80">{it.year}</div>
-                      <h3 className="font-display text-lg font-semibold mt-1">{it.role}</h3>
+                      <div className="text-xs uppercase tracking-wider text-primary/80">
+                        {it.year}
+                      </div>
+                      <h3 className="font-display text-lg font-semibold mt-1">
+                        {it.role}
+                      </h3>
                       <div className="text-sm text-foreground/75">{it.org}</div>
-                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{it.desc}</p>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        {it.desc}
+                      </p>
                     </div>
                   </div>
                   {/* dot */}
@@ -102,13 +118,16 @@ export function Experience() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="glass rounded-3xl p-7"
-          >
-            <h3 className="font-display text-xl font-semibold mb-5">Education</h3>
+            className="glass rounded-3xl p-7">
+            <h3 className="font-display text-xl font-semibold mb-5">
+              Education
+            </h3>
             <div className="space-y-4">
               {edu.map((e) => (
                 <div key={e.title} className="flex items-start gap-4">
-                  <div className="text-xs text-primary/80 mt-1 min-w-[80px]">{e.year}</div>
+                  <div className="text-xs text-primary/80 mt-1 min-w-[80px]">
+                    {e.year}
+                  </div>
                   <div>
                     <div className="font-medium">{e.title}</div>
                     <div className="text-sm text-muted-foreground">{e.sub}</div>
@@ -128,9 +147,10 @@ export function Experience() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="glass rounded-3xl p-7"
-          >
-            <h3 className="font-display text-xl font-semibold mb-5">Certifications</h3>
+            className="glass rounded-3xl p-7">
+            <h3 className="font-display text-xl font-semibold mb-5">
+              Certifications
+            </h3>
             <ul className="space-y-3">
               {certs.map((c) => (
                 <li key={c} className="flex items-center gap-3 text-sm">
@@ -142,6 +162,6 @@ export function Experience() {
           </motion.div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

@@ -91,6 +91,7 @@
   }
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 110px;
   }
   body {
     background-color: var(--color-background);
@@ -99,6 +100,33 @@
     font-feature-settings: "ss01", "cv11";
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
+  }
+  a,
+  button,
+  [role="button"],
+  input,
+  textarea,
+  select {
+    transition:
+      color 0.3s ease-out,
+      background-color 0.3s ease-out,
+      border-color 0.3s ease-out,
+      transform 0.3s ease-out,
+      box-shadow 0.3s ease-out,
+      opacity 0.3s ease-out;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
   body::before {
     content: "";

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "react-router-dom";
+import { scrollToSection } from "@/lib/scroll";
 
 const links = [
   { to: "/#home", label: "Home", id: "home" },
@@ -17,12 +18,30 @@ export function Navbar() {
   useEffect(() => {
     if (pathname === "/about-me") {
       setActive("whoami");
-      const onScroll = () => setScrolled(window.scrollY > 40);
+      let frame = 0;
+      const onScroll = () => {
+        if (frame) return;
+        frame = window.requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 40);
+          frame = 0;
+        });
+      };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
-      return () => window.removeEventListener("scroll", onScroll);
+      return () => {
+        if (frame) window.cancelAnimationFrame(frame);
+        window.removeEventListener("scroll", onScroll);
+      };
     }
-    const sectionIds = ["home", "about", "skills", "projects", "experience", "contact"];
+
+    const sectionIds = [
+      "home",
+      "about",
+      "skills",
+      "projects",
+      "experience",
+      "contact",
+    ];
     const navMap: Record<string, string> = {
       home: "home",
       about: "whoami",
@@ -31,22 +50,60 @@ export function Navbar() {
       experience: "whoami",
       contact: "contact",
     };
+
+    let frame = 0;
     const onScroll = () => {
-      setScrolled(window.scrollY > 40);
-      for (const id of sectionIds) {
-        const el = document.getElementById(id);
-        if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= 120 && rect.bottom >= 120) {
-          setActive(navMap[id] ?? id);
-          break;
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 40);
+        const entries = sectionIds
+          .map((id) => document.getElementById(id))
+          .filter((element): element is HTMLElement => Boolean(element));
+
+        if (!entries.length) {
+          frame = 0;
+          return;
         }
-      }
+
+        const visible = entries
+          .map((element) => {
+            const rect = element.getBoundingClientRect();
+            const visibleRatio =
+              Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+            return {
+              id: element.id,
+              ratio: Math.max(0, visibleRatio / rect.height),
+            };
+          })
+          .filter((entry) => entry.ratio > 0.1)
+          .sort((a, b) => b.ratio - a.ratio)[0];
+
+        if (visible) {
+          setActive(navMap[visible.id] ?? visible.id);
+        }
+        frame = 0;
+      });
     };
+
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [pathname]);
+
+  const handleLinkClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    link: (typeof links)[number],
+  ) => {
+    if (pathname !== "/" || !link.to.startsWith("/#")) return;
+    event.preventDefault();
+    const sectionId = link.to.replace("/#", "");
+    window.history.pushState({}, "", `/#${sectionId}`);
+    scrollToSection(`#${sectionId}`);
+    setActive(link.id);
+  };
 
   return (
     <motion.header
@@ -55,15 +112,15 @@ export function Navbar() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`hidden md:block fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
         scrolled ? "py-3" : "py-6"
-      }`}
-    >
+      }`}>
       <div className="mx-auto max-w-4xl px-4">
         <nav
           className={`flex items-center justify-between rounded-full px-5 py-2.5 transition-all duration-500 ${
             scrolled ? "glass-strong" : "glass"
-          }`}
-        >
-          <Link to="/#home" className="flex items-center gap-2 font-display font-bold tracking-tight">
+          }`}>
+          <Link
+            to="/#home"
+            className="flex items-center gap-2 font-display font-bold tracking-tight">
             <span className="inline-block h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_12px_var(--primary)]" />
             <span className="text-gradient">Marc Aspa</span>
           </Link>
@@ -72,17 +129,21 @@ export function Navbar() {
               <li key={l.id}>
                 <Link
                   to={l.to}
+                  onClick={(event) => handleLinkClick(event, l)}
                   className={`relative px-3.5 py-1.5 rounded-full transition-colors ${
                     active === l.id
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
+                  }`}>
                   {active === l.id && (
                     <motion.span
                       layoutId="nav-pill"
                       className="absolute inset-0 rounded-full bg-primary/15 border border-primary/30"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 380,
+                        damping: 30,
+                      }}
                     />
                   )}
                   <span className="relative">{l.label}</span>
@@ -92,8 +153,7 @@ export function Navbar() {
           </ul>
           <Link
             to="/#contact"
-            className="inline-flex items-center text-sm font-medium rounded-full px-4 py-1.5 bg-primary/15 border border-primary/30 hover:bg-primary/25 transition-colors"
-          >
+            className="inline-flex items-center text-sm font-medium rounded-full px-4 py-1.5 bg-primary/15 border border-primary/30 hover:bg-primary/25 transition-colors">
             Let's talk
           </Link>
         </nav>

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { prefersReducedMotion, scrollToSection } from "@/lib/scroll";
 
 /**
  * Scrolls to the element referenced by `location.hash` on route change,
@@ -9,15 +10,26 @@ export function ScrollToHash() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
+
     if (hash) {
       const id = hash.replace("#", "");
-      // Defer so the target section is mounted.
       requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        const element = document.getElementById(id);
+        if (element) {
+          scrollToSection(`#${id}`);
+        } else {
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReducedMotion() ? "auto" : "smooth",
+          });
+        }
       });
     } else {
-      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      window.scrollTo({
+        top: 0,
+        behavior: prefersReducedMotion() ? "auto" : "smooth",
+      });
     }
   }, [pathname, hash]);
 

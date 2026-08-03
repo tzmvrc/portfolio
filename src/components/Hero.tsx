@@ -94,7 +94,7 @@ export function Hero() {
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </a>
           <a
-            href="https://drive.google.com/file/d/1F6XmIFOsSMBRb0xJuJYdBHp1ieEKKIUM/view?usp=sharing"
+            href="https://drive.google.com/file/d/15Eot8lxHmXc_qwXCL-LLKZHvHoXtU1P-/view?usp=sharing"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 rounded-full glass px-6 py-3 text-sm font-medium hover:bg-primary/10 hover:border-primary/40 transition-all">

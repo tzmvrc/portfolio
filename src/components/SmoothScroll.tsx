@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import Lenis from "lenis";
+import { prefersReducedMotion } from "@/lib/scroll";
 
 export function SmoothScroll() {
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (prefersReducedMotion()) return;
 
     const lenis = new Lenis({
       duration: 1.05,
@@ -12,7 +13,11 @@ export function SmoothScroll() {
       smoothWheel: true,
       wheelMultiplier: 1,
       touchMultiplier: 1.2,
+      orientation: "vertical",
     });
+
+    window.__lenis = lenis;
+    window.history.scrollRestoration = "manual";
 
     let rafId = 0;
     const raf = (time: number) => {
@@ -23,6 +28,9 @@ export function SmoothScroll() {
 
     return () => {
       cancelAnimationFrame(rafId);
+      if (window.__lenis === lenis) {
+        delete window.__lenis;
+      }
       lenis.destroy();
     };
   }, []);

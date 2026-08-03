@@ -78,7 +78,13 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" className="relative py-28 sm:py-36">
+    <motion.section
+      id="contact"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.18, margin: "-80px" }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="relative py-28 sm:py-36">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-[400px] w-[700px] rounded-full bg-primary/15 blur-[140px]" />
       </div>
@@ -258,6 +264,6 @@ export function Contact() {
           </span>
         </div>
       </footer>
-    </section>
+    </motion.section>
   );
 }

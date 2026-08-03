@@ -177,7 +177,13 @@ export function Projects() {
   }, [selectedProject, currentIndex]);
 
   return (
-    <section id="projects" className="relative py-28 sm:py-36">
+    <motion.section
+      id="projects"
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.16, margin: "-80px" }}
+      transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      className="relative py-28 sm:py-36">
       <div className="mx-auto max-w-6xl px-6">
         <SectionHeading
           eyebrow="Projects"
@@ -395,6 +401,6 @@ export function Projects() {
         </AnimatePresence>,
         document.body,
       )}
-    </section>
+    </motion.section>
   );
 }
